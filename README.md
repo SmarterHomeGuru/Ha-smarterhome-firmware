@@ -34,6 +34,13 @@ Matching your devices happens on your Home Assistant. Nothing about your devices
 you is sent. The site sets no cookies on that request and sees only an IP address and the
 integration's version.
 
+## Data terms
+
+The firmware data comes from the [SmarterHome.guru firmware tracker](https://www.smarterhome.guru/firmware). It is
+free to use, including in your own apps and projects, with credit to SmarterHome.guru and a link to
+https://www.smarterhome.guru/firmware. Please don't sell the data or republish the whole catalog. Full terms:
+https://www.smarterhome.guru/terms#firmware-data. The integration's code is MIT licensed (see `LICENSE`).
+
 ## Install
 
 With [HACS](https://hacs.xyz): HACS → ⋮ → Custom repositories → add
