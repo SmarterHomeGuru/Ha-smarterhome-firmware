@@ -1,0 +1,14 @@
+{
+  "domain": "smarterhome_firmware",
+  "name": "SmarterHome Firmware",
+  "codeowners": ["@rdiamondbww"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/rdiamondbww/ha-smarterhome-firmware",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/rdiamondbww/ha-smarterhome-firmware/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "0.1.0"
+}

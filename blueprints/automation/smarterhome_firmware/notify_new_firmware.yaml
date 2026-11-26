@@ -1,0 +1,60 @@
+blueprint:
+  name: SmarterHome Firmware - notify me about new firmware
+  description: >-
+    Sends a phone notification when SmarterHome Firmware sees a new firmware version for one
+    of your devices, with what other owners reported. Optionally only when owners reported problems.
+  domain: automation
+  source_url: https://github.com/rdiamondbww/ha-smarterhome-firmware/blob/main/blueprints/automation/smarterhome_firmware/notify_new_firmware.yaml
+  input:
+    firmware_entities:
+      name: Devices to watch
+      description: The SmarterHome firmware entities to watch (pick all of them for every device).
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - integration: smarterhome_firmware
+              domain: update
+    notify_device:
+      name: Phone to notify
+      description: A phone with the Home Assistant companion app.
+      selector:
+        device:
+          filter:
+            - integration: mobile_app
+    only_problems:
+      name: Only when owners reported problems
+      default: false
+      selector:
+        boolean:
+
+mode: queued
+max: 20
+
+# Fires when a new version appears (not for updates already pending when you set this up).
+triggers:
+  - trigger: state
+    entity_id: !input firmware_entities
+    attribute: latest_version
+
+variables:
+  only_problems: !input only_problems
+
+conditions:
+  - condition: template
+    value_template: >-
+      {{ trigger.to_state is not none and trigger.to_state.state == 'on'
+         and (not only_problems or (trigger.to_state.attributes.owner_reports_problem | int(0)) > 0) }}
+
+actions:
+  - variables:
+      st: "{{ trigger.to_state }}"
+  - domain: mobile_app
+    type: notify
+    device_id: !input notify_device
+    title: "{{ st.attributes.title or st.attributes.friendly_name }} {{ st.attributes.latest_version }} is out"
+    message: >-
+      {% set p = st.attributes.owner_reports_problem | int(0) %}{% set ok = st.attributes.owner_reports_ok | int(0) %}{% if p %}{{ p }} owner{{ 's' if p != 1 }} reported problems. Read before updating.{% elif ok %}{{ ok }} owner{{ 's' if ok != 1 }} said it worked fine.{% else %}You have {{ st.attributes.installed_version }}.{% endif %}
+    data:
+      url: "{{ st.attributes.tracker_url }}"
+      clickAction: "{{ st.attributes.tracker_url }}"

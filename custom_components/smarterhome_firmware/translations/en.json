@@ -1,0 +1,31 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SmarterHome Firmware",
+        "description": "Adds a firmware entity to each device SmarterHome.guru tracks, with plain-English release notes and what other owners reported. Every 6 hours this downloads one public file from smarterhome.guru; nothing about your devices is sent."
+      }
+    },
+    "abort": {
+      "already_configured": "SmarterHome Firmware is already set up."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SmarterHome Firmware options",
+        "data": {
+          "skip_covered": "Skip devices whose own integration already offers firmware updates",
+          "include_beta": "Include beta and preview releases"
+        }
+      }
+    }
+  },
+  "entity": {
+    "update": {
+      "firmware": {
+        "name": "SmarterHome firmware"
+      }
+    }
+  }
+}
