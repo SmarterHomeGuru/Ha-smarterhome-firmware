@@ -47,14 +47,12 @@ conditions:
          and (not only_problems or (trigger.to_state.attributes.owner_reports_problem | int(0)) > 0) }}
 
 actions:
-  - variables:
-      st: "{{ trigger.to_state }}"
   - domain: mobile_app
     type: notify
     device_id: !input notify_device
-    title: "{{ st.attributes.title or st.attributes.friendly_name }} {{ st.attributes.latest_version }} is out"
+    title: "{{ trigger.to_state.attributes.title or trigger.to_state.attributes.friendly_name }} {{ trigger.to_state.attributes.latest_version }} is out"
     message: >-
-      {% set p = st.attributes.owner_reports_problem | int(0) %}{% set ok = st.attributes.owner_reports_ok | int(0) %}{% if p %}{{ p }} owner{{ 's' if p != 1 }} reported problems. Read before updating.{% elif ok %}{{ ok }} owner{{ 's' if ok != 1 }} said it worked fine.{% else %}You have {{ st.attributes.installed_version }}.{% endif %}
+      {% set p = trigger.to_state.attributes.owner_reports_problem | int(0) %}{% set ok = trigger.to_state.attributes.owner_reports_ok | int(0) %}{% if p %}{{ p }} owner{{ 's' if p != 1 }} reported problems. Read before updating.{% elif ok %}{{ ok }} owner{{ 's' if ok != 1 }} said it worked fine.{% else %}You have {{ trigger.to_state.attributes.installed_version }}.{% endif %}
     data:
-      url: "{{ st.attributes.tracker_url }}"
-      clickAction: "{{ st.attributes.tracker_url }}"
+      url: "{{ trigger.to_state.attributes.tracker_url }}"
+      clickAction: "{{ trigger.to_state.attributes.tracker_url }}"
